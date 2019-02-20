@@ -1,0 +1,582 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Bioinformatics - R Introduction},
+            pdfauthor={Wei-Hao, Lee},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{{#1}}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Bioinformatics - R Introduction}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Wei-Hao, Lee}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2/21/2019}
+
+
+\begin{document}
+\maketitle
+
+\section{R 基礎教學}\label{r-}
+
+\subsection{目錄}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  變數 - Variable :
+
+  \begin{itemize}
+  \tightlist
+  \item
+    變數指派
+  \item
+    移除變數
+  \end{itemize}
+\item
+  運算子 - Operator :
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Arithmetic Operator
+  \item
+    Logical Operator
+  \end{itemize}
+\item
+  變數類型與資料型別 :
+
+  \begin{itemize}
+  \tightlist
+  \item
+    變數類型
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Numeric
+    \item
+      Integer
+    \item
+      Logical
+    \item
+      Character
+    \end{itemize}
+  \item
+    資料型別
+
+    \begin{itemize}
+    \tightlist
+    \item
+      One Dimension
+
+      \begin{itemize}
+      \tightlist
+      \item
+        Vector
+      \item
+        Factor
+      \end{itemize}
+    \item
+      Two Dimension (Next Class)
+
+      \begin{itemize}
+      \tightlist
+      \item
+        Matrix
+      \item
+        Dataframe
+      \end{itemize}
+    \item
+      Multi-Dimension (Next Class)
+
+      \begin{itemize}
+      \tightlist
+      \item
+        List
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
+\subsubsection{1. 變數 - Variable}\label{---variable}
+
+變數主要用來存取任何合法資料，使用者可以方便地使用變數名稱來獲取或者使用資料。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 將"偉豪"這個資料存入變數 teacher_assistant中}
+\NormalTok{teacher_assistant <-}\StringTok{ "偉豪"}
+
+\CommentTok{# 我們就可以利用 teacher_assistant 這個變數來獲取裡面的資料}
+\KeywordTok{print}\NormalTok{(teacher_assistant)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "偉豪"
+\end{verbatim}
+
+\paragraph{變數指派}
+
+在上面的程式碼中，可以看到\texttt{\textless{}-}這個符號。這個符號用於將資料\textbf{賦予
+(assign)}給變數。以上述的例子，我們將\texttt{"偉豪"}這串文字賦值給變數\texttt{teacher\_assistant}中。在其他程式語言中，比較常用\texttt{=}當作賦值的符號，而R語言也有支援這種\texttt{=}賦值符號。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# R語言中最常使用的方法，也是最道地的用法}
+\NormalTok{TA_1 <-}\StringTok{ "乃文"}
+
+\CommentTok{# 在其他程式語言中賦值的方法，在許多時候仍可以看到。}
+\NormalTok{TA_2 =}\StringTok{ "嘉琪"}
+
+\CommentTok{# 也是賦值的方法之一，但極不推薦使用。}
+\StringTok{"漢萱"} \NormalTok{->}\StringTok{ }\NormalTok{TA_3}
+
+\KeywordTok{cat}\NormalTok{(TA_1, TA_2, TA_3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 乃文 嘉琪 漢萱
+\end{verbatim}
+
+\paragraph{移除變數}
+
+當變數或者資料不再需要使用時，我們可以移除變數，讓這些資料不佔用電腦的記憶體。我們可以使用\texttt{rm()}這個函式將變數以及內部的資料給刪除。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{TA_4 <-}\StringTok{ "玉潔"}
+\KeywordTok{print}\NormalTok{(TA_4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "玉潔"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 當變數 TA_4 不再需要使用時，可以將它刪除}
+\KeywordTok{rm}\NormalTok{(TA_4)}
+
+\CommentTok{# 若再次呼叫變數 TA_4 則會得到下方的警告}
+\NormalTok{TA_4}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Error in eval(expr, envir, enclos): object 'TA_4' not found
+\end{verbatim}
+
+\paragraph{變數命名}
+
+變數在命名，盡量以明確為主要的命名方式，不要以代號的形式作為變數名稱。為了程式的可讀性，我們會盡量在命名時花點心思，讓我們日後再次編輯程式時，不會感到困惑。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 最不推薦的方式，更不要以a,b,c,d為順序去做命名}
+\NormalTok{a <-}\StringTok{ "MAPKKK"}
+
+\CommentTok{# 明確的指出 "TP53" 是我們主要的目標基因}
+\NormalTok{target_gene <-}\StringTok{ "TP53"}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{2. 運算子 - Operator}\label{---operator}
+
+\paragraph{算術運算子 - Arithmetic
+Operator}\label{---arithmetic-operator}
+
+算術運算子就是我們幼稚園教的加減乘除\texttt{+}、\texttt{-}、\texttt{*}、\texttt{/}。而R語言中有提供更多的算術運算子像是次方\texttt{\^{}}
+or \texttt{**}
+以及獲取餘數\texttt{\%\%}。\emph{(補充說明：在不同程式語言中，他們有各自定義的運算子，即使符號相同其代表的意義也不同，所以在使用不同程式語言時不妨看看其運算子的定義)}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{4}
+\NormalTok{y <-}\StringTok{ }\DecValTok{3}
+
+\CommentTok{# 4 + 3}
+\NormalTok{x +}\StringTok{ }\NormalTok{y}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 7
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4 - 3}
+\NormalTok{x -}\StringTok{ }\NormalTok{y}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4 * 3}
+\NormalTok{x *}\StringTok{ }\NormalTok{y }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4 / 3}
+\NormalTok{x /}\StringTok{ }\NormalTok{y}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.333333
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4 / 3 = 3...1 取餘數 1}
+\NormalTok{x %%}\StringTok{ }\NormalTok{y }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 4 * 4 + 3 * 3 = 25}
+\NormalTok{x^}\DecValTok{2} \NormalTok{+}\StringTok{ }\NormalTok{y**}\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 25
+\end{verbatim}
+
+\emph{補充說明：以次方為例，python中\texttt{\^{}}是 bitwise
+operator，而非代表次方。另外在其他程式語言像Java中並沒有支援\texttt{**}
+or \texttt{\^{}}等運算子}
+
+\paragraph{邏輯運算子 - Logical Operator}\label{---logical-operator}
+
+邏輯運算子包含大於\texttt{\textgreater{}}、小於\texttt{\textless{}}、大於等於\texttt{\textgreater{}=}、小於等於\texttt{\textless{}=}、等於\texttt{==}、不等於\texttt{!=}、交集\texttt{\&\&}、聯集\texttt{\textbar{}\textbar{}}。透過兩者數值的比較之後告訴你布林值(boolean：TRUE
+or FALSE)。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{weight_a <-}\StringTok{ }\DecValTok{100}
+\NormalTok{weight_b <-}\StringTok{ }\DecValTok{20}
+
+\CommentTok{# 100 > 20 : TRUE}
+\NormalTok{weight_a >}\StringTok{ }\NormalTok{weight_b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 100 < 20: FALSE}
+\NormalTok{weight_a <}\StringTok{ }\NormalTok{weight_b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 100 >= 20: TRUE}
+\NormalTok{weight_a >=}\StringTok{ }\NormalTok{weight_b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 100 <= 20: FALSE}
+\NormalTok{weight_a <=}\StringTok{ }\NormalTok{weight_b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 100 == 20: FALSE}
+\NormalTok{weight_a ==}\StringTok{ }\NormalTok{weight_b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 100 != 20: TRUE}
+\NormalTok{weight_a !=}\StringTok{ }\NormalTok{weight_b}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 兩個敘述都為 TRUE 時，才會回傳 TRUE}
+\CommentTok{# 若其中一者為 FALSE 時，則回傳 FALSE}
+
+\CommentTok{# 100 > 30 and 20 < 200 : TRUE}
+\NormalTok{weight_a >}\StringTok{ }\DecValTok{30} \NormalTok{&&}\StringTok{ }\NormalTok{weight_b <}\StringTok{ }\DecValTok{200}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 100 < 30 and 20 < 200 : FALSE}
+\NormalTok{weight_a <}\StringTok{ }\DecValTok{30} \NormalTok{&&}\StringTok{ }\NormalTok{weight_b <}\StringTok{ }\DecValTok{200}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 其中一個敘述為 TRUE 則不管另一個是否為真都會回傳 TRUE}
+
+\CommentTok{# 100 < 30 or 20 < 200 : TRUE}
+\NormalTok{weight_a <}\StringTok{ }\DecValTok{30} \NormalTok{||}\StringTok{ }\NormalTok{weight_b <}\StringTok{ }\DecValTok{200}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\subsubsection{3. 變數類型與資料型別 - Data Type}\label{---data-type}
+
+在上述的舉例中我們並沒有明確告訴你們資料的\textbf{類型或型別(type)}，因為我們可以一眼看出他是文字還是數值，但電腦並無法直接判斷，因此我們需要告訴他是什麼類型。然而現今許多程式語言都具有自動判斷的功能，因此有時候我們就會忽略掉變數的類型，但是變數的型別在某些時候相當的重要，因此我們需要認識一些基本的資料型別。
+
+\paragraph{變數類型}
+
+我們可以利用函式\texttt{class()}查詢變數的類型。
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(}\StringTok{"偉豪"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "character"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(}\DecValTok{30}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 留意此處的 30 有加雙引號}
+\KeywordTok{class}\NormalTok{(}\StringTok{"30"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "character"
+\end{verbatim}
+
+\subparagraph{Numeric}\label{numeric}
+
+在R語言中，任何整數或者小數(浮點數)在賦值後都會直接歸類為\texttt{numeric}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 當我們輸入整數時}
+\NormalTok{right_angle <-}\StringTok{ }\DecValTok{90}
+\KeywordTok{class}\NormalTok{(right_angle)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 當我們輸入小數時}
+\NormalTok{angle <-}\StringTok{ }\FloatTok{24.5}
+\KeywordTok{class}\NormalTok{(angle)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "numeric"
+\end{verbatim}
+
+\emph{補充說明：在其他程式語言中，整數(integer)和浮點數(float)是兩種不同的資料型別，為什麽要區別主要原因是不同的資料型別會戰有不同的記憶體空間。}
+
+\subparagraph{Integer}\label{integer}
+
+\begin{quote}
+在R語言中並不會常使用整數這個型別，主要原因是numeric已經有包含整數的運算，所以無須特別將\texttt{numeric}轉成\texttt{integer}。但在其他程式語言像:C,
+C++, Java都會時常使用整數型別，因此特別介紹。
+\end{quote}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 要宣告成整數型態要在整數後面加上"L"}
+\NormalTok{age <-}\StringTok{ }\NormalTok{24L}
+\KeywordTok{class}\NormalTok{(age)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "integer"
+\end{verbatim}
+
+
+\end{document}
