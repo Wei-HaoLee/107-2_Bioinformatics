@@ -3,9 +3,9 @@ title: "Bioinformatics - R Introduction"
 author: "Wei-Hao, Lee"
 date: "2/21/2019"
 output:
-  html_document: default
-  pdf_document: default
   word_document: default
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -44,9 +44,17 @@ knitr::opts_chunk$set(echo = TRUE)
     * 流程控制搭配`break`和`next`
 6. Practice
 
+***
+
 ### 0. R installation
-R installation tutorial : [輕鬆學習R語言](http://www.learn-r-the-easy-way.tw/chapters/2) <br />
+*R installation tutorial* : [輕鬆學習R語言](http://www.learn-r-the-easy-way.tw/chapters/2) <br />
 而這個網頁也會是我們第一堂以及第二堂的參考資料，如果大家對於上課內容有疑惑的也可以到這邊參考。
+<br />
+
+*助教的github* : [Go to github](https://github.com/Wei0612/107-2_Bioinformatics) <br />
+這邊也會放入上課的講義，同時也會把上課操作的程式放在這裡提供大家參考，如果有問題也可以在issue中提問。
+
+***
 
 ### 1. 變數 - Variable
 變數主要用來存取任何合法資料，使用者可以方便地使用變數名稱來獲取或者使用資料。
@@ -98,8 +106,9 @@ a <- "MAPKKK"
 # 明確的指出 "TP53" 是我們主要的目標基因
 target_gene <- "TP53"
 ```
-
 <br />
+
+***
 
 ### 2. 運算子 - Operator
 #### 算術運算子 - Arithmetic Operator
@@ -157,6 +166,8 @@ weight_a < 30 || weight_b < 200
 ```
 
 <br />
+
+***
 
 ### 3. 變數類型與資料型別 - Data Type
 在上述的舉例中我們並沒有明確告訴你們資料的**類型或型別(type)**，因為我們可以一眼看出他是文字還是數值，但電腦並無法直接判斷，因此我們需要告訴他是什麼類型。然而現今許多程式語言都具有自動判斷的功能，因此有時候我們就會忽略掉變數的類型，但是變數的型別在某些時候相當的重要，因此我們需要認識一些基本的資料型別。
@@ -300,7 +311,9 @@ print(cancer_factor)
 ```
 factor是一個相對難理解以及操作的資料型態，因此通常會使用向量，如果有需要時再轉為因素向量，在我們後續課程中會使用到因素向量做繪圖以及基因表象量差異計算。
 
-### 4. 流程控制
+***
+
+### 4. 流程控制 (Control flow)
 流程控制主要用途就是要來判斷是否該執行以下的程式碼，因此需要給予至少一個條件式或布林值，而在程式語言中最常使用的就是if或者if ... else 或者當條件多個時可以使用 if ... else if ... else。其實if...else。
 ```{r}
 age <- 13
@@ -353,6 +366,8 @@ if (age >= 18) {
     print("禁止觀看")
 }
 ```
+
+***
 
 ### 5. 迴圈 (loop)
 #### 基本操作
@@ -427,6 +442,8 @@ for (i in 1:3) {
 ```
 *補充說明：在其他語言中，continue等同於next的功能*
 
+***
+
 ### Practice
 #### 簡單. 利用 for loop 做出九九乘法表
 ```{r echo=FALSE}
@@ -475,3 +492,56 @@ for (bill in type_of_bills)
     cat("$", bill, "\t:\t", num, "\n", sep="")
 }
 ```
+
+***
+
+__補充資料  : `print()`, `cat()`, `paste()` 使用方式__
+`print()`這個函式只能放入一個變數，所以在使用時通常會搭配`paste()`去做使用。而`cat()`這個函式適合多個變數帶入，如果有認真觀察，上面的例子，就會發現我使用上的區別囉！
+
+```{r error=TRUE}
+teacher_assistant <- "Wei-Hao Lee"
+
+# 在只有一個變數的情況下 cat() 和 paste() 無差別
+print(teacher_assistant)
+cat(teacher_assistant)
+
+# 如果給予 print() 超過一個變數時
+print(teacher_assistant, "阿不就好棒棒")
+```
+<br />
+
+因此在多個變數時我們可以使用 `cat()` 或者 `paste()`，然而這兩個函式使用上有些差異，`cat()` 跟 `print()` 很像可以將變數裡的內容印出，但是 `paste()` 則是將變數裡的內容黏在一起形成文字(字串)，通常我們會使用一個變數將合併完的文字儲存，而 `cat()` 則無法用變數把內容保存。
+
+```{r error=TRUE}
+# cat() 會直接印出來，但是無法用變數將資料保存下來
+cat(teacher_assistant, "阿不就好棒棒")
+
+# 不會告訴你錯誤，並且會印出結果
+statement <- cat(teacher_assistant, "阿不就好棒棒")
+# 但是再次使用變數則會發現是空的
+print(statement)
+
+# paste() 會將變數內的東西合併在一起，並且可以用變數保存
+paste(teacher_assistant, "阿不就好棒棒")
+
+statement <- paste(teacher_assistant, "阿不就好棒棒")
+print(statement)
+```
+<br />
+
+眼尖的你們是否發現使用`paste()`和`cat()`中間都會有一個空白鍵呢？原因是在函式內部設定已經幫你在文字中加入一個空白鍵，如果我們想要更改的話可以在函式的括弧中加入`sep="你想要的任何東西"`。
+```{r}
+cat("HEHE!!", "HAHA", sep="***你想要的任何東西***")
+paste("ID", "000123", sep=":")
+
+# 常見的特殊字元"\n", "\t"
+
+# "\n" newline 換新的一行，是否發現“切斷了”前面有空白呢？為什麼？
+cat("我被", "\n", "切斷了")
+
+# "\t" tab鍵的功能
+cat("我被", "\t", "拉長了")
+```
+
+***
+E-mail : steve24563@gmail.com

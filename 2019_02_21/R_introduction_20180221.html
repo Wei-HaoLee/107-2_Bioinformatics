@@ -242,9 +242,12 @@ $(document).ready(function () {
 </ul></li>
 <li>Practice</li>
 </ol>
+<hr />
 <div id="r-installation" class="section level3">
 <h3>0. R installation</h3>
-<p>R installation tutorial : <a href="http://www.learn-r-the-easy-way.tw/chapters/2">輕鬆學習R語言</a> <br /> 而這個網頁也會是我們第一堂以及第二堂的參考資料，如果大家對於上課內容有疑惑的也可以到這邊參考。</p>
+<p><em>R installation tutorial</em> : <a href="http://www.learn-r-the-easy-way.tw/chapters/2">輕鬆學習R語言</a> <br /> 而這個網頁也會是我們第一堂以及第二堂的參考資料，如果大家對於上課內容有疑惑的也可以到這邊參考。 <br /></p>
+<p><em>助教的github</em> : <a href="https://github.com/Wei0612/107-2_Bioinformatics">Go to github</a> <br /> 這邊也會放入上課的講義，同時也會把上課操作的程式放在這裡提供大家參考，如果有問題也可以在issue中提問。</p>
+<hr />
 </div>
 <div id="---variable" class="section level3">
 <h3>1. 變數 - Variable</h3>
@@ -295,6 +298,7 @@ a &lt;- &quot;MAPKKK&quot;
 # 明確的指出 &quot;TP53&quot; 是我們主要的目標基因
 target_gene &lt;- &quot;TP53&quot;</code></pre>
 <p><br /></p>
+<hr />
 </div>
 </div>
 <div id="---operator" class="section level3">
@@ -365,6 +369,7 @@ weight_a &lt; 30 &amp;&amp; weight_b &lt; 200</code></pre>
 weight_a &lt; 30 || weight_b &lt; 200</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p><br /></p>
+<hr />
 </div>
 </div>
 <div id="---data-type" class="section level3">
@@ -503,11 +508,12 @@ print(cancer_factor)</code></pre>
 <pre><code>## [1] Lung       Breast     Brain      Colorectal
 ## Levels: Brain &lt; Breast &lt; Colorectal &lt; Lung</code></pre>
 <p>factor是一個相對難理解以及操作的資料型態，因此通常會使用向量，如果有需要時再轉為因素向量，在我們後續課程中會使用到因素向量做繪圖以及基因表象量差異計算。</p>
+<hr />
 </div>
 </div>
 </div>
-<div class="section level3">
-<h3>4. 流程控制</h3>
+<div id="-control-flow" class="section level3">
+<h3>4. 流程控制 (Control flow)</h3>
 <p>流程控制主要用途就是要來判斷是否該執行以下的程式碼，因此需要給予至少一個條件式或布林值，而在程式語言中最常使用的就是if或者if … else 或者當條件多個時可以使用 if … else if … else。其實if…else。</p>
 <pre class="r"><code>age &lt;- 13
 
@@ -559,6 +565,7 @@ if (age &gt;= 18) {
     print(&quot;禁止觀看&quot;)
 }</code></pre>
 <pre><code>## [1] &quot;太過刺激請勿觀看&quot;</code></pre>
+<hr />
 </div>
 <div id="-loop" class="section level3">
 <h3>5. 迴圈 (loop)</h3>
@@ -663,6 +670,7 @@ for (i in 1:3) {
 ## 3 - 4 
 ## 3 - 6</code></pre>
 <p><em>補充說明：在其他語言中，continue等同於next的功能</em></p>
+<hr />
 </div>
 </div>
 <div id="practice" class="section level3">
@@ -701,6 +709,54 @@ for (i in 1:3) {
 ## $11  :   0
 ## $7   :   1
 ## $1   :   1</code></pre>
+<hr />
+<p><strong>補充資料 : <code>print()</code>, <code>cat()</code>, <code>paste()</code> 使用方式</strong> <code>print()</code>這個函式只能放入一個變數，所以在使用時通常會搭配<code>paste()</code>去做使用。而<code>cat()</code>這個函式適合多個變數帶入，如果有認真觀察，上面的例子，就會發現我使用上的區別囉！</p>
+<pre class="r"><code>teacher_assistant &lt;- &quot;Wei-Hao Lee&quot;
+
+# 在只有一個變數的情況下 cat() 和 paste() 無差別
+print(teacher_assistant)</code></pre>
+<pre><code>## [1] &quot;Wei-Hao Lee&quot;</code></pre>
+<pre class="r"><code>cat(teacher_assistant)</code></pre>
+<pre><code>## Wei-Hao Lee</code></pre>
+<pre class="r"><code># 如果給予 print() 超過一個變數時
+print(teacher_assistant, &quot;阿不就好棒棒&quot;)</code></pre>
+<pre><code>## Warning in print.default(teacher_assistant, &quot;阿不就好棒棒&quot;): NAs introduced
+## by coercion</code></pre>
+<pre><code>## Error in print.default(teacher_assistant, &quot;阿不就好棒棒&quot;): invalid 'digits' argument</code></pre>
+<p><br /></p>
+<p>因此在多個變數時我們可以使用 <code>cat()</code> 或者 <code>paste()</code>，然而這兩個函式使用上有些差異，<code>cat()</code> 跟 <code>print()</code> 很像可以將變數裡的內容印出，但是 <code>paste()</code> 則是將變數裡的內容黏在一起形成文字(字串)，通常我們會使用一個變數將合併完的文字儲存，而 <code>cat()</code> 則無法用變數把內容保存。</p>
+<pre class="r"><code># cat() 會直接印出來，但是無法用變數將資料保存下來
+cat(teacher_assistant, &quot;阿不就好棒棒&quot;)</code></pre>
+<pre><code>## Wei-Hao Lee 阿不就好棒棒</code></pre>
+<pre class="r"><code># 不會告訴你錯誤，並且會印出結果
+statement &lt;- cat(teacher_assistant, &quot;阿不就好棒棒&quot;)</code></pre>
+<pre><code>## Wei-Hao Lee 阿不就好棒棒</code></pre>
+<pre class="r"><code># 但是再次使用變數則會發現是空的
+print(statement)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code># paste() 會將變數內的東西合併在一起，並且可以用變數保存
+paste(teacher_assistant, &quot;阿不就好棒棒&quot;)</code></pre>
+<pre><code>## [1] &quot;Wei-Hao Lee 阿不就好棒棒&quot;</code></pre>
+<pre class="r"><code>statement &lt;- paste(teacher_assistant, &quot;阿不就好棒棒&quot;)
+print(statement)</code></pre>
+<pre><code>## [1] &quot;Wei-Hao Lee 阿不就好棒棒&quot;</code></pre>
+<p><br /></p>
+<p>眼尖的你們是否發現使用<code>paste()</code>和<code>cat()</code>中間都會有一個空白鍵呢？原因是在函式內部設定已經幫你在文字中加入一個空白鍵，如果我們想要更改的話可以在函式的括弧中加入<code>sep=&quot;你想要的任何東西&quot;</code>。</p>
+<pre class="r"><code>cat(&quot;HEHE!!&quot;, &quot;HAHA&quot;, sep=&quot;***你想要的任何東西***&quot;)</code></pre>
+<pre><code>## HEHE!!***你想要的任何東西***HAHA</code></pre>
+<pre class="r"><code>paste(&quot;ID&quot;, &quot;000123&quot;, sep=&quot;:&quot;)</code></pre>
+<pre><code>## [1] &quot;ID:000123&quot;</code></pre>
+<pre class="r"><code># 常見的特殊字元&quot;\n&quot;, &quot;\t&quot;
+
+# &quot;\n&quot; newline 換新的一行，是否發現“切斷了”前面有空白呢？為什麼？
+cat(&quot;我被&quot;, &quot;\n&quot;, &quot;切斷了&quot;)</code></pre>
+<pre><code>## 我被 
+##  切斷了</code></pre>
+<pre class="r"><code># &quot;\t&quot; tab鍵的功能
+cat(&quot;我被&quot;, &quot;\t&quot;, &quot;拉長了&quot;)</code></pre>
+<pre><code>## 我被    拉長了</code></pre>
+<hr />
+<p>E-mail : <a href="mailto:steve24563@gmail.com">steve24563@gmail.com</a></p>
 </div>
 </div>
 </div>
