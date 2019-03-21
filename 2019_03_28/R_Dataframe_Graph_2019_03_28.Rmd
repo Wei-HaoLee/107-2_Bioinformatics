@@ -1,0 +1,585 @@
+---
+title: "Bioinformatics - R Dataframe and Plots"
+author: "Wei-Hao, Lee"
+date: "3/28/2019"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Outline
+0. Review
+    - 註解 (Comment)
+    - 縮排 (Indent)
+    - 作業講解 -- 九九乘法表
+1. 函式 (function)
+2. Package installation
+3. Dataframe
+    - Check Data Format
+    - Load or Read Data
+    - Basic Operation
+    - Output Data
+    - Advanced technique (Depends teaching progress)
+4. Plots
+    - Scatter plots
+    - Box plots
+    - Line chart
+    - Save plot
+
+### 0. Review
+#### 註解 (Comment)
+註解就是替程式增添文字上的說明，方便日後重新閱讀程式能夠快速了解當初的原意。在R語言中只提供單行註解，利用`# 你想打的東西放在井字號後都是註解喔～`，舉例來說：
+``` {r}
+num <- "Wei-Hao" # 這是名字
+# 也可以獨立出一行作註解
+```
+同時也可以利用註解的功能，將部分的程式改為註解，就不會執行了！
+``` {r}
+age <- 18
+# age <- age + 2
+print(age)
+```
+</br>
+
+#### 縮排 (Indent)
+縮排其實就是利用tab鍵使文字內縮，就像寫作文分段時會留空告訴讀者這是新的一段。在程式語言中，縮排可以幫助理解程式的邏輯以及架構，舉例來說：
+``` {r}
+age <- 30
+if (age > 18) {
+    print("Older than 18!") # 這裡就是按了一個tab鍵做程式的縮排
+}
+```
+如果程式不使用縮排時會導致程式難以閱讀，看以下九九乘法表範例：
+``` {r results='hide'}
+for (i in 1:9)
+{
+for (j in 1:9)
+{
+cat(i, "*", j, "=", i*j, "\t")
+}
+cat("\n")
+}
+```
+是不是變得難以理解了呢，如果我們的使用縮排就可以明顯看出層級關係了喔！
+``` {r results='hide'}
+for (i in 1:9)
+{
+    for (j in 1:9)
+    {
+        cat(i, "*", j, "=", i*j, "\t")
+    }
+    cat("\n")
+}
+```
+</br>
+
+#### 作業講解 -- 九九乘法表 (僅供參考)
+**程式並沒有一定的答案，只要寫得出來就是對的答案，這堂課只需要練習出寫出對的答案，無需追求執行速度**
+```{r}
+# 現練習用for迴圈印出1~9並且分行印出
+for (i in 1:9)
+{
+    cat(i)
+    cat("\n") # \n 換行符號代表 newline
+}
+```
+如今我們可以另用`i`印出1~9，我們進一步的在每一行都印出1~9
+``` {r}
+for (i in 1:9)
+{
+    # 其實很簡單，我們在這邊在加入一個for迴圈，負責印出1~9
+    for (j in 1:9) # 切記這裡變數不可以在使用i
+    {
+        cat("i:j=", i, ":", j, "\t", sep="")
+    }
+    cat("\n")
+}
+```
+有沒有發現，其實這已經就是九九乘法了嗎？我們再稍微修改一下印出的格式即可囉～
+``` {r}
+for (i in 1:9)
+{
+    for (j in 1:9)
+    {
+        cat(i, "*", j, "=", i*j, "\t") # 其實要印出兩數字相乘，直接在cat函式中數入i*j就可以了喔！
+    }
+    cat("\n")
+}
+```
+*稍微再思考一下，如何印出直行的九九乘法表呢！*
+``` {r echo=F}
+for (i in 1:9)
+{
+    for (j in 1:9)
+    {
+        cat(j, "*", i, "=", i*j, "\t") # 其實要印出兩數字相乘，直接在cat函式中數入i*j就可以了喔！
+    }
+    cat("\n")
+}
+```
+</br>
+
+### 1. 函式 (function)
+function其實就是使用者自己定義的功能，且可以重複的使用。當一個程式大量撰寫重複的程式時，我們便可以撰寫成函式，方便使用。而我們其實已經看過很多函式像是`as.integer()`, `mean()`等。接下來就來介紹函式撰寫的方式：
+``` {r}
+# 這就是最簡的 function，沒有任何功能的函式
+# 函式名稱 <- function() {}
+simplest_function <- function() {
+    
+}
+
+simplest_function() # 呼叫函式時，記得一定要寫括弧
+simplest_function
+```
+我們開始在`{}`中，加入我們要使用的功能
+``` {r}
+# 記得函式也要遵守變數的命名原則
+hello_world <- function() {
+    print("Hello World!")
+}
+
+hello_world()
+```
+假設今天我們要撰寫我們自己的function專門計算平均值，代表我們的function要有能力接受我們傳入的數值在去做平均值的計算。方法其實很簡單：
+``` {r error=T}
+# 在function 的“()”中設定我們要接受的資料
+class_height <- 175
+
+# 這邊的numbers其實也是個變數，專門接收我們傳入的資料，我們通常稱這些變數為parameter參數
+bio_means <- function(numbers) { 
+    print(numbers)
+}
+
+bio_means(class_height)
+
+# 這邊要注意！我們可以看到numbers無法被印出來
+# 原因是，當function結束時，numbers這個變數也會跟著消失
+print(numbers)
+```
+我們也可以同時傳入多個資料：
+``` {r error=T}
+name <- "Wei-Hao"
+id <- 123456789
+
+identification <- function(name, id) {
+    cat("name :", name)
+    cat("\n")
+    cat("id :", id)
+}
+identification(name, id)
+
+# 如果你明確知道哪些參數資料需要什麼樣類型的資料
+# 也可以直接在function中，明確指出哪些參數等於哪些資料
+identification(name="Lee", id="0217047")
+
+weird_identification <- function(name, id) {
+    name <- "BA BA BA" # change both id and name
+    id <- "LA LA LA"
+    cat("name :", name)
+    cat("\n")
+    cat("id :", id)
+}
+weird_identification(name, id)
+
+# 我們在identification更改的東西，並未直接的
+cat("name :", name, "\n", "id :", id)
+
+# 跟identification 只差了function
+tricky_identification <- function() {
+    cat("name :", name)
+    cat("\n")
+    cat("id :", id)
+}
+tricky_identification()
+```
+從上述兩個function中講了一些蠻重要的觀念：</br>
+
+1. function中的參數，雖然名稱與傳入的變數相同，但是是不同的東西(看`weird_identification()`的例子)，function中的參數是另外獨立屬於這個function的變數，而傳入的資料則會複製一份給參數。
+2. 在看`tricky_identification()`，我們可以觀察到，若function沒有參數時，但裡面有用到已經存在的變數，他便會自動的調取這些變數做使用！
+</br>
+
+我們剛剛的例子，都只是印出東西，如果我們想要有個函式計算平均值，並且把計算完後的平均值傳給某個變數該怎麼做呢，我們只需要使用`return()`就可以達成囉！
+``` {r}
+class_heights <- c(123, 145, 135 , 175, 189)
+
+mean_height <- function(class_heights) {
+    total_height <- 0
+    num_of_classmate <- length(class_heights)
+    
+    for (height in class_heights)
+    {
+        total_height <- total_height + height
+    }
+    return(total_height/num_of_classmate)
+}
+
+class_mean_height <- mean_height(class_heights)
+
+print(class_mean_height)
+```
+上述都是function中蠻重要的觀念，還有一小部分沒有講到(Scope)，如果有興趣的同學可以點取連結，寫出更有彈性的function。
+[Creating Functions](https://swcarpentry.github.io/r-novice-inflammation/02-func-R/index.html) </br></br>
+
+#### Practice.1 - Selection sort
+Selection sort 是一種排序的方法，它的原理很簡單，請參考 [Selection Sort](https://en.wikipedia.org/wiki/Selection_sort) <br/>
+你們要寫出一個function叫`selection_sort(series)`，series是一連串的數字用vector存放，這個function要能夠回傳由小排到大的vector。請大家練習自己用for迴圈寫出來，不要使用`sort()`!! 題目有點困難，請同學思考一下，也可以參考網路上的解答，不要鑽研 big O的問題。
+``` {r}
+series <- c(0, 3, 1, 13, 84, 25, 91, 1, 2)
+```
+``` {r echo=F}
+selection_sort <- function(series) {
+    len_of_series <- length(series) # series 的長度
+    
+    for (i in 1:(len_of_series-1))
+    {
+        location_of_minimum <- i
+        for (j in (i+1):len_of_series)
+        {
+            if (series[j] < series[location_of_minimum]) # if correct, swap the number
+            {
+                location_of_minimum <- j
+            }
+        }
+        
+        # 檢查是否最小值就在目前的位置，如果不是就要做交換
+        if(location_of_minimum != i)
+        {
+            tmp <- series[i]
+            series[i] <- series[location_of_minimum]
+            series[location_of_minimum] <- tmp
+        }
+    }
+    return(series)
+}
+```
+```{r}
+selection_sort(series)
+```
+<br/><br/>
+
+### 2. Package installation
+Package其實就是別人將他寫好的function整理成一個package，提供給別人使用。通常每個package都會有他主要處理的目的，像是`dplyr`就是專門為了處理資料所使用的package，`ggplot2`專門為了繪圖所使用的package，接下來我們會教大家如何安裝package。
+我們只要在console中打入`install.packages("dplyr")`，就可以開始下載`dplyr`囉！
+
+下載完後，並非可以直接使用，你只是將package下載到電腦中。要使用時要：
+``` {r}
+library(dplyr) # 可能會覺得有點怪，一下叫package一下叫library，這邊就請同學熟悉一下囉！
+```
+那麼這邊就麻煩同學下載今天要使用的package: `dplyr`, `ggplot2`, `ggtheme`, `reshape2`, `magrittr`
+<br/><br/>
+
+### 3. Dataframe
+#### Check Data Format
+dataframe是一種資料型態，最為大家熟知的就像是excel檔。然而我們在excel中可以任意使用裡面的格子，而且不需要有整齊的格式，但是在R語言甚至是python裡的pandas都是無法處理這種格式不一致的檔案。因此我們在讀取資料前，要先確人我們的資料格式正確且整齊，避免電腦無法匯入想要的資料。待會再進行資料處理時，你們也可以同時知道為什麼R語言並不支援讀取格式混亂的檔案。<br/>
+
+首先這邊會推薦大家使用幾個好用的text editor。原先text editor其實就是提供使用編輯文字用的程式，但由於近幾年的開發，目前大多數的text editor都有編譯執行程式的功能。
+
+- Visual Studio Code (Personal Recommendation)
+- Atom
+- Notepad ++
+- ... more
+
+接下來要介紹幾種常見的格式`.tsv`, `csv`
+```
+# tsv file, 以tab鍵作為資料的分隔
+1   2   3   4   5   6
+
+# csv file, 以comma作為資料的分隔
+1,2,3,4,5,6
+```
+<br/>
+
+#### Load Data
+讀取檔案有兩種方式，一種是透過R studio做匯入，另外一種透過絕對路徑(absolute path)再搭配`read.csv()` or `read.table()`，那麼接下來主要是示範如何透過絕對路徑讀取檔案。首先絕對路徑就是一段字串告訴電腦檔案的位置 ex: `~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.csv` (for Mac OSX, Linux，在mac中絕對路徑不好取得，這邊教大家使用一下偷吃步！如果會command line的同學請盡量使用command line), `C:\Documents\Newsletters\Summer2018.pdf` (for Windows，Windows的絕對路徑較好取得)。接下來就是讀取檔案
+``` {r error=T}
+# how to read csv file
+iris <- read.csv(file = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.csv", # file path
+                 stringsAsFactors = FALSE, # 只要有文字的那行，會直接轉為factor，因使我們要取消此功能
+                 row.names = 1, # 告訴電腦第一列資料是 row name
+                 header = TRUE, # 第一行是 column 的名稱
+                 check.names = FALSE) # check.name是幫使用者檢查 column and row name，有時候名稱會跑掉
+head(iris, n=5) # 顯示 iris dataframe 前五行
+```
+
+``` {r}
+# how to read tsv file
+iris <- read.table(file = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.tsv", # file path
+                   stringsAsFactors = FALSE, # 只要有文字的那行，會直接轉為factor，因使我們要取消此功能
+                   row.names = 1, # 告訴電腦第一列資料是 row name
+                   header = TRUE,
+                   sep = "\t", # 設定文件是使用什麼符號做為分隔
+                   check.names = FALSE) # check.name是幫使用者檢查 column and row name，有時候名稱會跑掉
+head(iris, n=5) # 顯示 iris dataframe 前五行
+```
+
+``` {r}
+# how to rad excel format
+library(readxl)
+iris_excel <- read_excel(path = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.xlsm", # file path
+                   sheet = 1, # number of sheet, or you can use the name of sheet you want
+                   col_names = TRUE,
+                   col_types = NULL,  
+                   na = "", # missing value
+                   skip = 0) #Number of rows to skip before reading any data.
+head(iris_excel, n=5)
+```
+*補充說明，如果是讀取excel檔的話，read_excel()會將資料整理成tibble的格式，看起來會與前面兩者有些不同，但是基本操作上是一模一樣的，但是有些功能會有異，如果想要讓他成為一般的dataframe，請使用as.data.frame()。*
+``` {r}
+class(iris_excel)
+iris_excel <- as.data.frame(iris_excel)
+class(iris_excel)
+head(iris_excel)
+
+```
+如今你已經會讀取檔案了，通常在讀取完資料花一點時間，看一下你的資料是否有誤，不要做完分析後才發現原使數據有誤喔！<br/>
+<br/><br/>
+
+#### Basic operation
+首先我們要練習如何讀取dataframe裡面的資料，像是讀取特定行數、利用行或列的名稱讀取該行該列。在R語言中有內建很好用的格式，讓使用者使用`dataframe_variable[row, column]`。接下來為大家示範一下：
+``` {r}
+# row - 行; column - 列 (這堂課之後都以英文代表行列)
+# 首先先觀察資料
+head(iris)
+# 假設我們要選取 Species這個 column
+iris[,"Species"] # 由於我們沒有要選取特定row，所以我們可以不用填寫row (這和python的pandas稍有不同)
+# 假設我們今天要選取 1~5 的row
+iris[1:5,]
+# 假設我們今天要取出row 1~5 的Petal.Width
+iris[1:5, "Petal.Width"]
+# 也可以將Petal.Width改為他在第幾個column
+iris[1:5, 4]
+```
+事實上R語言中有提供更方便的方式，讓使用者讀取某個column (column only!!) 就是`$` dollar sign，接下來會見到他很多次，請大家習慣他的用法。
+``` {r}
+# dataframe_name$column_name
+iris$Species # same as iris[,"Species"]
+# 假設我們今天想要確認 Species 中是否有 setosa
+iris$Species == "setosa" # 會回傳 true and false
+# 那我們如何從原始的dataframe取出只含有 virginica species的 row呢
+iris[iris$Species == "virginica",]
+# 我們也可以檢查哪些sample的petal.width大於等於２
+iris[iris$Petal.Width >= 2,]
+```
+那要如何選取多個欄位，以及更改欄位順序呢？
+``` {r}
+# select multiple column
+sub_iris <- iris[,c("Petal.Width", "Species")] # 這邊就無法使用$做多行選取喔！
+head(sub_iris)
+# changing column order
+sub_iris <- iris[,c("Species", "Petal.Width")] # 大家是否有發現，我們挑選出來的column換按照我們輸入的順序改變喔
+head(sub_iris) # 因此我們如果要調整個column順序的話，使用者就得乖乖的把你想要的順序寫出來喔！
+```
+在這邊為止，我們已經會了一些基本的操作，接下來我們會介紹一些常用的function：
+``` {r}
+# number of row
+nrow(iris)
+# number of column
+ncol(iris)
+# dimension
+dim(iris)
+# column names
+colnames(iris) # same as names(iris), but I prefer using colnames.
+# row names
+rownames(iris) # 由於我們這次的資料並沒有rowname，所以看rownames意義不大，但是在下次上課我們就會用到囉
+# looking from top
+head(iris, n=5)
+# looking from bottom
+tail(iris, n=5)
+# overview dataset
+summary(iris)
+str(iris)
+```
+**接下來會教一些常用的小技巧：**
+``` {r}
+# add new column
+iris$Petal_area <- iris$Petal.Length * iris$Petal.Width
+head(iris)
+
+# add new column with condition
+iris$isLonger <- ifelse(iris$Petal.Length > 2, TRUE, FALSE)
+head(iris)
+
+# add blank column
+iris$blank <- "" # also can replace with 0
+head(iris)
+
+# remove multiple columns
+iris <- iris[,!colnames(iris) %in% c("isLonger", "blank")]
+head(iris)
+
+# remove single column
+iris$Petal_area <- NULL
+head(iris)
+
+# rename column
+colnames(iris)
+colnames(iris)[1] <- "Sepal_Length"
+colnames(iris)
+colnames(iris)[1:4] <-c("Sepal_Length", "Sepal_Width", "Petal_Length", "Petal_Width")
+colnames(iris)
+
+# split dataframe by column
+iris_Sepal <- iris[,c("Sepal_Length", "Sepal_Width")]
+head(iris_Sepal)
+iris_Petal <- iris[,c("Petal_Length", "Petal_Width")]
+head(iris_Petal)
+
+# merge two dataframe using column bind
+iris_flower <- cbind(iris_Sepal, iris_Petal)
+head(iris_flower)
+
+# split dataframe by row
+iris_top_5 <- iris[1:5,]
+head(iris_top_5, n = 5)
+iris_bottom_5 <- tail(iris, n=5)
+head(iris_bottom_5, n=5)
+
+# merge two dataframe using row bind
+iris_row_bind <- rbind(iris_top_5, iris_bottom_5)
+head(iris_row_bind)
+```
+
+### Plot
+這邊推薦兩個很棒的網站，有助於大家繪製心目中的圖。
+
+- [The R Graph Gallery](https://www.r-graph-gallery.com/)
+- [STHDA](http://www.sthda.com/english/)
+
+這邊要跟大家先說明，繪圖可能是R語言中最困難的部分，有很多的參數以及功能需要靠大家多使用才能熟練。雖然有人為了使用者開發了許多的package，可是仍有很多東西需要記憶，因此本堂課我會教大家必要的東西，其他的一些功能需要大家多多利用上面兩個網址去做詳細的參閱。<br/>
+
+#### Scatter plot
+``` {r}
+# 基本起手式，產生畫布
+library(ggplot2)
+g <- ggplot(data=iris, # indicate which data you want to use
+            aes(x=Petal_Length, y=Petal_Width)) # aes indicate x and y axis
+print(g)
+
+g + geom_point() # 明確指明你要做哪一種繪圖方式，這邊選取的事散步圖或點圖
+g + geom_point(aes(color=Species)) # 由於我們有三種species，我們可以透過標記顏色觀察其分佈
+
+# 是不是覺得背景很煩呢？，這邊我們提供幾個別人設計好的模板
+library(ggthemes) # 提供數個模板，模板的樣式都是 theme_???? 
+g + geom_point(aes(color=Species)) + theme_bw()
+```
+**補充資料**：[ggthemes](https://www.rdocumentation.org/packages/ggthemes/versions/3.5.0)
+``` {r}
+# fill color
+g + geom_point(aes(color=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
+
+# chage shape
+g + geom_point(aes(color=Species, shape=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+    scale_shape_manual(values=c(3,1,13))
+
+# modify plot and axis title
+g + geom_point(aes(color=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+    labs(x="Petal Length (m)", y="Petal Width (m)",
+         title="Iris petal length vs width", subtitle = "I am subtitle")
+
+# move plot title to middle of plot
+g + geom_point(aes(color=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+    labs(x="Petal Length (m)", y="Petal Width (m)",
+         title="Iris petal length vs width", subtitle = "I am subtitle") +
+    theme(plot.title = element_text(hjust = .5)) ####
+
+# move plot title to middle of plot
+g + geom_point(aes(color=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+    labs(x="Petal Length (m)", y="Petal Width (m)",
+         title="Iris petal length vs width", subtitle = "I am subtitle") +
+    theme(plot.title = element_text(hjust = .5),
+          plot.subtitle = element_text(hjust = .5)) ####
+
+# modify axis title
+g + geom_point(aes(color=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+    labs(x="Petal Length (m)", y="Petal Width (m)",
+         title="Iris petal length vs width", subtitle = "I am subtitle") +
+    theme(plot.title = element_text(hjust = .5),
+          plot.subtitle = element_text(hjust = .5),
+          axis.title = element_text(family="Helvetica", size = 16)) ####
+
+# modify x and y axis respectively
+g + geom_point(aes(color=Species)) + theme_few() +
+    scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+    labs(x="Petal Length (m)", y="Petal Width (m)",
+         title="Iris petal length vs width", subtitle = "I am subtitle") +
+    theme(plot.title = element_text(hjust = .5),
+          plot.subtitle = element_text(hjust = .5),
+          axis.title = element_text(family="Helvetica"), ####
+          axis.title.x = element_text(size = 16), ####
+          axis.title.y = element_text(size = 20)) ####
+
+# hide legend
+final <- g + geom_point(aes(color=Species)) + theme_few() +
+        scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9")) +
+        labs(x="Petal Length (m)", y="Petal Width (m)",
+            title="Iris petal length vs width", subtitle = "I am subtitle") +
+            theme(plot.title = element_text(hjust = .5),
+            plot.subtitle = element_text(hjust = .5),
+            axis.title = element_text(family="Helvetica"),
+            axis.title.x = element_text(size = 16),
+            axis.title.y = element_text(size = 20),
+            legend.position = "none") # also can use c(x_position, y_position) to change position
+print(final)
+```
+<br/>
+
+#### Box plot
+``` {r}
+# set x and y axis data
+b <- ggplot(data=iris, aes(x=Species, y=Petal_Width))
+
+# boxplot
+b + geom_boxplot()
+
+# fill colour into boxplot
+b + geom_boxplot(aes(fill=Species))
+
+# change outlier colour
+b + geom_boxplot(aes(fill=Species),
+                 outlier.color = "red",
+                 outlier.alpha = .75)
+```
+
+#### Line chart
+``` {r}
+line_segment <- pretty(c(1:20), 100)
+y <- sin(line_segment)
+
+sin_data <- data.frame(x=line_segment, y=y)
+head(sin_data)
+
+ggplot(sin_data, aes(x=x, y=y)) + geom_line()
+```
+
+#### Save plot
+圖表的可以儲存成`pdf()`, `jpeg()`, `tiff()`...，這邊為大家介紹兩個最常見的格式tiff and pdf。
+``` {r error=T}
+output_pdf_path <- "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/iris.pdf"
+# save as pdf
+pdf(file = output_pdf_path,
+    width = 5, height = 5)
+print(final)
+dev.off()
+
+output_tiff_path <- "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/iris.tiff"
+# save as tiff
+tiff(file = output_tiff_path,
+     width = 5, height = 5, units = "in", res = 300)
+print(final)
+dev.off()
+```
+<br/>
+
+#### Remind
+由於這次內容也很多，希望同學可以花一點時間理解，在後續課程我會使用今天上課的內容，程式要常用才會記得住，有時候可以試著不使用excel，使用R來分析看看，加深自己的印象。如果有問題的話可以寄E-mail。
+E-mail : steve24563@gmail.com
