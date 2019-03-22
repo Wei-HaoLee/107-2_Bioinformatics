@@ -477,8 +477,13 @@ print(class_mean_height)</code></pre>
 <div id="load-data" class="section level4">
 <h4>Load Data</h4>
 <p>讀取檔案有兩種方式，一種是透過R studio做匯入，另外一種透過絕對路徑(absolute path)再搭配<code>read.csv()</code> or <code>read.table()</code>，那麼接下來主要是示範如何透過絕對路徑讀取檔案。首先絕對路徑就是一段字串告訴電腦檔案的位置 ex: <code>~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.csv</code> (for Mac OSX, Linux，在mac中絕對路徑不好取得，這邊教大家使用一下偷吃步！如果會command line的同學請盡量使用command line), <code>C:\Documents\Newsletters\Summer2018.pdf</code> (for Windows，Windows的絕對路徑較好取得)。接下來就是讀取檔案</p>
+<pre class="r"><code># 讀取工作路徑
+getwd()</code></pre>
+<pre><code>## [1] &quot;/Users/lee-weihao/Documents/TeacherAssistant/Bioninformatics/2019_03_28&quot;</code></pre>
+<pre class="r"><code># 設定工作路徑
+# setwd()</code></pre>
 <pre class="r"><code># how to read csv file
-iris &lt;- read.csv(file = &quot;~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.csv&quot;, # file path
+iris &lt;- read.csv(file = &quot;./Iris.csv&quot;, # file path
                  stringsAsFactors = FALSE, # 只要有文字的那行，會直接轉為factor，因使我們要取消此功能
                  row.names = 1, # 告訴電腦第一列資料是 row name
                  header = TRUE, # 第一行是 column 的名稱
@@ -491,7 +496,7 @@ head(iris, n=5) # 顯示 iris dataframe 前五行</code></pre>
 ## 4          4.6         3.1          1.5         0.2  setosa
 ## 5          5.0         3.6          1.4         0.2  setosa</code></pre>
 <pre class="r"><code># how to read tsv file
-iris &lt;- read.table(file = &quot;~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.tsv&quot;, # file path
+iris &lt;- read.table(file = &quot;./Iris.tsv&quot;, # file path
                    stringsAsFactors = FALSE, # 只要有文字的那行，會直接轉為factor，因使我們要取消此功能
                    row.names = 1, # 告訴電腦第一列資料是 row name
                    header = TRUE,
@@ -506,7 +511,7 @@ head(iris, n=5) # 顯示 iris dataframe 前五行</code></pre>
 ## 5          5.0         3.6          1.4         0.2  setosa</code></pre>
 <pre class="r"><code># how to rad excel format
 library(readxl)
-iris_excel &lt;- read_excel(path = &quot;~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.xlsm&quot;, # file path
+iris_excel &lt;- read_excel(path = &quot;./Iris.xlsm&quot;, # file path
                    sheet = 1, # number of sheet, or you can use the name of sheet you want
                    col_names = TRUE,
                    col_types = NULL,  
@@ -1082,7 +1087,7 @@ head(sin_data)</code></pre>
 <div id="save-plot" class="section level4">
 <h4>Save plot</h4>
 <p>圖表的可以儲存成<code>pdf()</code>, <code>jpeg()</code>, <code>tiff()</code>…，這邊為大家介紹兩個最常見的格式tiff and pdf。</p>
-<pre class="r"><code>output_pdf_path &lt;- &quot;~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/iris.pdf&quot;
+<pre class="r"><code>output_pdf_path &lt;- &quot;./iris.pdf&quot;
 # save as pdf
 pdf(file = output_pdf_path,
     width = 5, height = 5)
@@ -1090,7 +1095,7 @@ print(final)
 dev.off()</code></pre>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>
-<pre class="r"><code>output_tiff_path &lt;- &quot;~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/iris.tiff&quot;
+<pre class="r"><code>output_tiff_path &lt;- &quot;./iris.tiff&quot;
 # save as tiff
 tiff(file = output_tiff_path,
      width = 5, height = 5, units = &quot;in&quot;, res = 300)

@@ -3,8 +3,8 @@ title: "Bioinformatics - R Dataframe and Plots"
 author: "Wei-Hao, Lee"
 date: "3/28/2019"
 output:
-  word_document: default
   html_document: default
+  word_document: default
 ---
  
 ```{r setup, include=FALSE}
@@ -459,7 +459,7 @@ head(iris_row_bind)
 這邊要跟大家先說明，繪圖可能是R語言中最困難的部分，有很多的參數以及功能需要靠大家多使用才能熟練。雖然有人為了使用者開發了許多的package，可是仍有很多東西需要記憶，因此本堂課我會教大家必要的東西，其他的一些功能需要大家多多利用上面兩個網址去做詳細的參閱。<br/>
 
 #### Scatter plot
-``` {r}
+``` {r error=T}
 # 基本起手式，產生畫布
 library(ggplot2)
 g <- ggplot(data=iris, # indicate which data you want to use
@@ -474,7 +474,7 @@ library(ggthemes) # 提供數個模板，模板的樣式都是 theme_????
 g + geom_point(aes(color=Species)) + theme_bw()
 ```
 **補充資料**：[ggthemes](https://www.rdocumentation.org/packages/ggthemes/versions/3.5.0)
-``` {r}
+``` {r error=T}
 # fill color
 g + geom_point(aes(color=Species)) + theme_few() +
     scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"))
@@ -541,7 +541,7 @@ print(final)
 <br/>
 
 #### Box plot
-``` {r}
+``` {r error=T}
 # set x and y axis data
 b <- ggplot(data=iris, aes(x=Species, y=Petal_Width))
 
@@ -558,7 +558,7 @@ b + geom_boxplot(aes(fill=Species),
 ```
 
 #### Line chart
-``` {r}
+``` {r error=T}
 line_segment <- pretty(c(1:20), 100)
 y <- sin(line_segment)
 
