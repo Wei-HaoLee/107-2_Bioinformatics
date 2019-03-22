@@ -6,7 +6,7 @@ output:
   word_document: default
   html_document: default
 ---
-
+ 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -295,9 +295,16 @@ dataframe是一種資料型態，最為大家熟知的就像是excel檔。然而
 
 #### Load Data
 讀取檔案有兩種方式，一種是透過R studio做匯入，另外一種透過絕對路徑(absolute path)再搭配`read.csv()` or `read.table()`，那麼接下來主要是示範如何透過絕對路徑讀取檔案。首先絕對路徑就是一段字串告訴電腦檔案的位置 ex: `~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.csv` (for Mac OSX, Linux，在mac中絕對路徑不好取得，這邊教大家使用一下偷吃步！如果會command line的同學請盡量使用command line), `C:\Documents\Newsletters\Summer2018.pdf` (for Windows，Windows的絕對路徑較好取得)。接下來就是讀取檔案
+```{r}
+# 讀取工作路徑
+getwd()
+
+# 設定工作路徑
+# setwd()
+```
 ``` {r error=T}
 # how to read csv file
-iris <- read.csv(file = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.csv", # file path
+iris <- read.csv(file = "./Iris.csv", # file path
                  stringsAsFactors = FALSE, # 只要有文字的那行，會直接轉為factor，因使我們要取消此功能
                  row.names = 1, # 告訴電腦第一列資料是 row name
                  header = TRUE, # 第一行是 column 的名稱
@@ -305,9 +312,9 @@ iris <- read.csv(file = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28
 head(iris, n=5) # 顯示 iris dataframe 前五行
 ```
 
-``` {r}
+``` {r error=T}
 # how to read tsv file
-iris <- read.table(file = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.tsv", # file path
+iris <- read.table(file = "./Iris.tsv", # file path
                    stringsAsFactors = FALSE, # 只要有文字的那行，會直接轉為factor，因使我們要取消此功能
                    row.names = 1, # 告訴電腦第一列資料是 row name
                    header = TRUE,
@@ -316,10 +323,10 @@ iris <- read.table(file = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_
 head(iris, n=5) # 顯示 iris dataframe 前五行
 ```
 
-``` {r}
+``` {r error=T}
 # how to rad excel format
 library(readxl)
-iris_excel <- read_excel(path = "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/Iris.xlsm", # file path
+iris_excel <- read_excel(path = "./Iris.xlsm", # file path
                    sheet = 1, # number of sheet, or you can use the name of sheet you want
                    col_names = TRUE,
                    col_types = NULL,  
@@ -336,7 +343,7 @@ head(iris_excel)
 
 ```
 如今你已經會讀取檔案了，通常在讀取完資料花一點時間，看一下你的資料是否有誤，不要做完分析後才發現原使數據有誤喔！<br/>
-<br/><br/>
+<br/><br/> 
 
 #### Basic operation
 首先我們要練習如何讀取dataframe裡面的資料，像是讀取特定行數、利用行或列的名稱讀取該行該列。在R語言中有內建很好用的格式，讓使用者使用`dataframe_variable[row, column]`。接下來為大家示範一下：
@@ -564,14 +571,14 @@ ggplot(sin_data, aes(x=x, y=y)) + geom_line()
 #### Save plot
 圖表的可以儲存成`pdf()`, `jpeg()`, `tiff()`...，這邊為大家介紹兩個最常見的格式tiff and pdf。
 ``` {r error=T}
-output_pdf_path <- "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/iris.pdf"
+output_pdf_path <- "./iris.pdf"
 # save as pdf
 pdf(file = output_pdf_path,
     width = 5, height = 5)
 print(final)
 dev.off()
 
-output_tiff_path <- "~/Documents/TeacherAssistant/Bioninformatics/2019_03_28/iris.tiff"
+output_tiff_path <- "./iris.tiff"
 # save as tiff
 tiff(file = output_tiff_path,
      width = 5, height = 5, units = "in", res = 300)
